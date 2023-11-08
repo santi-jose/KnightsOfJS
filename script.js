@@ -15,15 +15,22 @@ function changePlayer() {
         let playerTwoHealth = document.getElementById("playerTwoHealth");
         // conversts the innerHTML from string to a number and stores it in a variable
         let playerTwoHealthNum = Number(playerTwoHealth.innerHTML);
-        // reduces by 10
-        playerTwoHealthNum -= 10;
+        // calculate random attack damage from 10 to 20 to deal to enemy
+        // Math.random() returns value [0, 1)
+        // Math.random() * 11 changes range from [0, 11)
+        // (Math.random() * 11) + 10 changes range to [10, 21) 
+        // Math.floor((Math.random() * 11) + 10) converts range to whole
+        // numbers only [10, 20]
+        let attackDamage = Math.floor(((Math.random() * 10) + 11));
+        // calculate damage from attack (-attackDamage)
+        playerTwoHealthNum -= attackDamage; 
         // resets the HTML to the new value
         playerTwoHealth.innerHTML = playerTwoHealthNum;
 
         // checks if the player has reached 0 health
         if (playerTwoHealthNum <= 0) {
             // ensures health does not dig into the negative
-            playerTwoHealth = 0;
+            playerTwoHealth.innerText = 0;
             // ends the game
             gameOver();
         }
@@ -41,15 +48,22 @@ function changePlayer() {
         let playerOneHealth = document.getElementById("playerOneHealth");
         // convert innerText from string to a number and store it in a variable
         let playerOneHealthNum = Number(playerOneHealth.innerText);
-        // calculate damage from attack (-10)
-        playerOneHealthNum -= 10; 
+        // calculate random attack damage from 10 to 20 to deal to enemy
+        // Math.random() returns value [0, 1)
+        // Math.random() * 11 changes range from [0, 11)
+        // (Math.random() * 11) + 10 changes range to [10, 21) 
+        // Math.floor((Math.random() * 11) + 10) converts range to whole
+        // numbers only [10, 20]
+        let attackDamage = Math.floor(((Math.random() * 10) + 11));
+        // calculate damage from attack (-attackDamage)
+        playerOneHealthNum -= attackDamage; 
         // assign new playerOneHealth to playerOneHealth span
         playerOneHealth.innerText = playerOneHealthNum;
 
         // check for player health 0
         if(playerOneHealthNum <= 0){
             // clamp health to 0
-            playerOneHealth = 0;
+            playerOneHealth.innerText = 0;
             // end game
             gameOver();
         }else{ // switch game state to player 1 turn
