@@ -35,6 +35,30 @@ function changePlayer() {
             let playerName = document.getElementById("playerName");
             playerName.innerHTML = `Player ${gameState.whoseTurn}`;
         }
+    }else{ // gameState.whoseTurn === 2
+
+        // get playerOneHealth span
+        let playerOneHealth = document.getElementById("playerOneHealth");
+        // convert innerText from string to a number and store it in a variable
+        let playerOneHealthNum = Number(playerOneHealth.innerText);
+        // calculate damage from attack (-10)
+        playerOneHealthNum -= 10; 
+        // assign new playerOneHealth to playerOneHealth span
+        playerOneHealth.innerText = playerOneHealthNum;
+
+        // check for player health 0
+        if(playerOneHealthNum <= 0){
+            // clamp health to 0
+            playerOneHealth = 0;
+            // end game
+            gameOver();
+        }else{ // switch game state to player 1 turn
+            gameState.whoseTurn = 1;
+
+            // change `playerName` element to indicate it is now playerOne's turn
+            let playerName = document.getElementById("playerName");
+            playerName.innerText =  `Player ${gameState.whoseTurn}`;
+        }
     }
 }
 
@@ -130,18 +154,80 @@ function attackPlayerTwo() {
     }
 }
 
+// funciton called when an attack to player one is triggered 
+// by attackPlayerOne button
 function attackPlayerOne() {
-    if (gameState.whoseTurn === 2) {
-        let playerOneHealth = document.getElementById("playerOneHealth");
-        let playerOneHealthNum = Number(playerOneHealth.innerHTML);
-        playerOneHealthNum -= 10;
-        playerOneHealth.innerHTML = playerOneHealthNum;
+    // changes attack button for player 1 attack to innactive
+    // also disables player 1 attack button so it is not interactable
+    // and attack button for player 2 to active
+    function changeButtonStatus(){
+        // get playerOneAttack button
+        const playerOneAttackButton = document.getElementById("playerOneAttack");
+        playerOneAttackButton.disabled = true; // disable playerOneAttack button
+        playerOneAttackButton.classList.add("inactive"); // add class inactive to P1 attack button
+        playerOneAttackButton.classList.remove("active"); // remove class active to P1 attack button
 
-        if (playerOneHealth <= 0) {
-            playerOneHealth = 0;
-            gameOver();
-        } else {
-            changePlayer();
+        // get plyaerTwoAttack button
+        const playerTwoAttackButton = document.getElementById("playerTwoAttack");
+        playerTwoAttackButton.disabled = false; // set disabled property to false
+        playerTwoAttackButton.classList.add("active"); // add class active to P2 attack button
+        playerTwoAttackButton.classList.remove("inactive"); // remove class innactive to P2 button
+    }
+
+    // animate player 2 sprite using array of images
+    function animatePlayer(){
+        let playerTwoFrames = [
+            "./images/L_idle.png", // idle frame
+            "./images/L_attack.png" // attack frame
+        ]
+
+        // get playerSprite element from index.html
+        const playerSprite = document.getElementById("playerTwoSprite");
+
+        // set playerSprite source to the attack frame
+        playerSprite.src = playerTwoFrames[1];
+        // remove idle class from playerSprite
+        playerSprite.classList.remove("idle");
+        // add attack class to playerSprite
+        playerSprite.classList.add("attack");
+
+        // get enemy sprite and enemy damage sfx elements
+        const enemySprite = document.getElementById("playerOneSprite");
+        const enemyDamage = document.getElementById("SFX_PlayerDamage");
+
+        // remove idle class from enemySprite
+        enemySprite.classList.remove("idle");
+        // add damage class to enemySprite
+        enemySprite.classList.add("damage");
+
+        // play damage sound effect
+        enemyDamage.play();
+
+        // funciton to call with timeout
+        // it will reset our enemy and player sprite to their idles
+        function changePlayerTwoSprite(){
+            // remove damage class form enemySprite
+            enemySprite.classList.remove("damage");
+            // add idle class to enemySprite
+            enemySprite.classList.add("idle");
+
+            // set playerSprite src to idle frame
+            playerSprite.src = playerTwoFrames[0];
+            // remove attack class from playerSprite
+            playerSprite.classList.remove("attack");
+            // add idle class to playerSprite
+            playerSprite.classList.add("idle");
         }
+
+        // call setTimeout for 350 ms to change sprites after 
+        setTimeout(changePlayerTwoSprite, 350);
+    }
+    
+    // if it is currently player 2's turn, animate player,
+    // change button status, and change player
+    if(gameState.whoseTurn === 2){
+        animatePlayer();
+        changeButtonStatus();
+        changePlayer();
     }
 }
