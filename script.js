@@ -99,6 +99,9 @@ function gameOver() {
     // stop looping background music
     const backgroundMusic = document.getElementById("backgroundMusic");
     backgroundMusic.loop = false;
+
+    // put gameState.over to true
+    gameState.gameOver = true;
 }
 
 // function that allows the player two attack button to reduce the player two's
@@ -257,7 +260,20 @@ function attackPlayerOne() {
 }
 
 // setup eventListener to play background music when the webpage is clicked
-document.addEventListener("click", function () {
+const startGame = document.getElementById("playerTwoAttack");
+startGame.addEventListener("click", playMusic);
+
+// funciton triggers when document is clicked for first time
+// then is never triggered again
+function playMusic(){
     const backgroundMusic = document.getElementById("backgroundMusic");
     backgroundMusic.play();
-});
+    document.removeEventListener("click", playMusic); // only trigger once
+}
+
+// function to reset game state to initial
+function resetGame(){
+    gameState.gameOver = false; // set gameOver to false
+    gameState.whoseTurn = 1; // set player turn to 1
+    
+}
