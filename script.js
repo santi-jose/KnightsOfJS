@@ -17,20 +17,23 @@ function changePlayer() {
         let playerTwoHealthNum = Number(playerTwoHealth.innerHTML);
         // calculate random attack damage from 10 to 20 to deal to enemy
         // Math.random() returns value [0, 1)
-        // Math.random() * 11 changes range from [0, 11)
-        // (Math.random() * 11) + 10 changes range to [10, 21) 
-        // Math.floor((Math.random() * 11) + 10) converts range to whole
-        // numbers only [10, 20]
-        let attackDamage = Math.floor(((Math.random() * 10) + 11));
+        // Math.random() * 21 changes range from [0, 21)
+        // (Math.random() * 21) + 5 changes range to [5, 26) 
+        // Math.floor((Math.random() * 21) + 5) converts range to whole
+        // numbers only [5, 25]
+        let attackDamage = Math.floor(((Math.random() * 21) + 5));
+        // console.log(`playerOne attackDamage: ${attackDamage}`);
         // calculate damage from attack (-attackDamage)
         playerTwoHealthNum -= attackDamage; 
+        // console.log(`playerTwoHealth: ${playerTwoHealthNum}`);
         // resets the HTML to the new value
         playerTwoHealth.innerHTML = playerTwoHealthNum;
 
         // checks if the player has reached 0 health
         if (playerTwoHealthNum <= 0) {
             // ensures health does not dig into the negative
-            playerTwoHealth.innerText = 0;
+            playerTwoHealthNum = 0;
+            playerTwoHealth.innerText = playerTwoHealthNum;
             // ends the game
             gameOver();
         }
@@ -50,20 +53,23 @@ function changePlayer() {
         let playerOneHealthNum = Number(playerOneHealth.innerText);
         // calculate random attack damage from 10 to 20 to deal to enemy
         // Math.random() returns value [0, 1)
-        // Math.random() * 11 changes range from [0, 11)
-        // (Math.random() * 11) + 10 changes range to [10, 21) 
-        // Math.floor((Math.random() * 11) + 10) converts range to whole
-        // numbers only [10, 20]
-        let attackDamage = Math.floor(((Math.random() * 10) + 11));
+        // Math.random() * 21 changes range from [0, 21)
+        // (Math.random() * 21) + 5 changes range to [5, 26) 
+        // Math.floor((Math.random() * 21) + 5) converts range to whole
+        // numbers only [5, 25]
+        let attackDamage = Math.floor(((Math.random() * 21) + 5));
+        // console.log(`playerTwo attackDamage: ${attackDamage}`);
         // calculate damage from attack (-attackDamage)
         playerOneHealthNum -= attackDamage; 
+        // console.log(`playerOneHealth: ${playerOneHealthNum}`);
         // assign new playerOneHealth to playerOneHealth span
         playerOneHealth.innerText = playerOneHealthNum;
 
         // check for player health 0
         if(playerOneHealthNum <= 0){
             // clamp health to 0
-            playerOneHealth.innerText = 0;
+            playerOneHealthNum = 0;
+            playerOneHealth.innerText = playerOneHealthNum;
             // end game
             gameOver();
         }else{ // switch game state to player 1 turn
@@ -89,6 +95,10 @@ function gameOver() {
 
     let gameOverScreen = document.getElementById("gameOverScreen");
     gameOverScreen.style = "display: flex; flex-direction: column;";
+
+    // stop looping background music
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    backgroundMusic.loop = false;
 }
 
 // function that allows the player two attack button to reduce the player two's
@@ -245,3 +255,9 @@ function attackPlayerOne() {
         changePlayer();
     }
 }
+
+// setup eventListener to play background music when the webpage is clicked
+document.addEventListener("click", function () {
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    backgroundMusic.play();
+});
